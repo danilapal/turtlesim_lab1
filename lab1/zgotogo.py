@@ -11,8 +11,8 @@ class turtlebot():
         rospy.init_node('listener')
         self.velocity_publisher = rospy.Publisher('/turtle_2/cmd_vel', Twist, queue_size=10)
         self.pose_subscriber = rospy.Subscriber('/turtle_2/pose', Pose, self.callback)
-	self._subscriber = rospy.Subscriber('/turtle_1/pose', Pose, self.move2goal)
-        self.pose = None
+	self.goal_subscriber = rospy.Subscriber('/turtle_1/pose', Pose, self.move2goal)
+        self.pose = Pose()
         self.rate = rospy.Rate(10)
 
     def callback(self, data):
@@ -28,18 +28,17 @@ class turtlebot():
         return angle
 
     def move2goal(self,msg):
-	if self.pose is not None:
-		goal_pose = Pose()
-		goal_pose = msg
-		distance_tolerance = 1.0
-		vel_msg = Twist()
+	goal_pose = Pose()
+	goal_pose = msg
+	distance_tolerance = 1.0
+	vel_msg = Twist()
 
-		if (self.get_distance(goal_pose.x, goal_pose.y) >= distance_tolerance):
+	if (self.get_distance(goal_pose.x, goal_pose.y) >= distance_tolerance):
    
-			vel_msg.linear.x = 0.5 * self.get_distance(goal_pose.x, goal_pose.y)
-			vel_msg.angular.z = 4 * self.get_angle(goal_pose.x, goal_pose.y)
+		vel_msg.linear.x = 0.5 * self.get_distance(goal_pose.x, goal_pose.y)
+		vel_msg.angular.z = 4 * self.get_angle(goal_pose.x, goal_pose.y)
 
-			self.velocity_publisher.publish(vel_msg)
+		self.velocity_publisher.publish(vel_msg)
 		    
 x = turtlebot()
 rospy.spin()
