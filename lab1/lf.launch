@@ -1,0 +1,29 @@
+<launch>
+    <arg name="turtle_1" default="turtle_1"/>
+    <arg name="turtle_2" default="turtle_2"/>
+    <node pkg="turtlesim"
+          type="turtlesim_node"
+          name="abc"
+          output="screen">
+        <remap from="/turtle1/pose" to="$(arg turtle_1)/pose"/>
+    </node>
+    <node pkg="lab1"
+          type="spawner.py"
+          name="spawner"
+          output="screen">
+        <param name="turtle_2" value="$(arg turtle_2)" type="string"/>
+    </node>
+    <node pkg="turtlesim"
+          type="turtle_teleop_key"
+          name="control_node"
+          output="screen"
+    />
+    <node pkg="lab1"
+          type="zgotogo.py"
+          name="listener"
+          output="screen">
+        <remap from="/turtle1/pose" to="$(arg turtle_1)/pose"/>
+        <remap from="/turtle2/pose" to="$(arg turtle_2)/pose"/>
+        <remap from="/turtle2/cmd_vel" to="$(arg turtle_2)/cmd_vel"/>
+    </node>
+</launch>
