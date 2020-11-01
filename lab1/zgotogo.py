@@ -11,8 +11,8 @@ class turtlebot():
         rospy.init_node('listener')
         self.velocity_publisher = rospy.Publisher('/turtle_2/cmd_vel', Twist, queue_size=10)
         self.pose_subscriber = rospy.Subscriber('/turtle_2/pose', Pose, self.callback)
-	    self._subscriber = rospy.Subscriber('/turtle_1/pose', Pose, self.move2goal)
-	    self.initPose = 1
+	self._subscriber = rospy.Subscriber('/turtle_1/pose', Pose, self.move2goal)
+	self.initPose = 1
         self.pose = None
         self.rate = rospy.Rate(10)
 
